@@ -7,7 +7,7 @@ public class Movement : MonoBehaviour
     private float lateralMovement; //右左行動入力
     private bool jumpInput; //ジャンプ入力
     private bool jumpHeld; //ジャンプボタン長押ししてるか
-    private bool jumpReleased;
+    private bool jumpReleased; //ジャンプ入力が消えたらこれが一瞬だけTrueになる。長押しの高いジャンプのメソッドに使う
 
     [SerializeField] private Character owner;//どのキャラに繋がってる
 
@@ -46,17 +46,9 @@ public class Movement : MonoBehaviour
             {
                 Jump();
             }
-            if(rb.linearVelocity.y > 0f && !jumpHeld && jumpReleased)
-            {
-                rb.linearVelocity = new Vector3(rb.linearVelocity.x, rb.linearVelocity.y * jumpReleaseModifier, 0f);
-                jumpReleased = false;
-            }
+            ReduceJumpSpeedOnRelease();
         }
-        if(rb.linearVelocity.y < 0f)
-        {
-            rb.linearVelocity = rb.linearVelocity + Vector3.down * fallSpeedModifier * fallSpeedModifier * Time.deltaTime;
-            rb.linearVelocity = new Vector3(rb.linearVelocity.x, Mathf.Clamp(rb.linearVelocity.y, -terminalVelocity, 0f), 0f);
-        }
+        FallFast();
     }
     public void Jump()
     {
@@ -106,6 +98,28 @@ public class Movement : MonoBehaviour
         else
         {
             canJump = true;
+        }
+    }
+    private void ReduceJumpSpeedOnRelease()
+    {
+        /*
+         * ジャンプ入力の長押しやめたらジャンプの速度が低くなる
+         */
+        if (rb.linearVelocity.y > 0f && !jumpHeld && jumpReleased)
+        {
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, rb.linearVelocity.y * jumpReleaseModifier, 0f);
+            jumpReleased = false;
+        }
+    }
+    private void FallFast()
+    {
+        /*
+         * 落ちる速度を普通の重力より高くする
+         */
+        if (rb.linearVelocity.y < 0f)
+        {
+            rb.linearVelocity = rb.linearVelocity + Vector3.down * fallSpeedModifier * fallSpeedModifier * Time.deltaTime;
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, Mathf.Clamp(rb.linearVelocity.y, -terminalVelocity, 0f), 0f);
         }
     }
     public bool JumpInput
