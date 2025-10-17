@@ -6,6 +6,7 @@ public class Character : MonoBehaviour
     [SerializeField] private bool hostile;
 
     [SerializeField] private Movement characterMovement;
+    [SerializeField] private bool isPlayer;
     /*
      * [SerializeField] private Weapon[] weapons
      * [SerializeField] private Weapon activeWeapon;
@@ -13,16 +14,7 @@ public class Character : MonoBehaviour
      * [SerializeField] private Skill activeSkill;
      */
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     public void Die()
     {
         alive = false;
