@@ -15,6 +15,7 @@ public class PlayerBehavior : MonoBehaviour
     private void Start()
     {
         playerInput.previousJumpHeld = false;
+        movement.Stepping = false;
     }
 
     void Update()

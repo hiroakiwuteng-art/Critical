@@ -9,7 +9,8 @@ public class PlayerInput
     [SerializeField] private bool jumpInput;
     private bool jumpHeld;
     public bool previousJumpHeld;
-    
+    private bool stepInput;
+
     public void ReadMovementInput()
     {
         /*
@@ -18,6 +19,7 @@ public class PlayerInput
         lateralInput = Input.GetAxisRaw("Horizontal");
         jumpInput = Input.GetButtonDown("Jump");
         jumpHeld = Input.GetButton("Jump");
+        stepInput = Input.GetButtonDown("Fire3");
         if(!jumpHeld && jumpHeld != previousJumpHeld)
         {
             owner.CharacterMovement.JumpReleased = true;
@@ -32,6 +34,7 @@ public class PlayerInput
         owner.CharacterMovement.LateralMovement = lateralInput;
         owner.CharacterMovement.JumpInput = jumpInput;
         owner.CharacterMovement.JumpHeld = jumpHeld;
+        owner.CharacterMovement.StepInput = stepInput;
     }
     public Character Owner
     {
