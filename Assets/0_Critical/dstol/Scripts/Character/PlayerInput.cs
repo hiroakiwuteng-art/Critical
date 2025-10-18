@@ -19,7 +19,7 @@ public class PlayerInput
         lateralInput = Input.GetAxisRaw("Horizontal");
         jumpInput = Input.GetButtonDown("Jump");
         jumpHeld = Input.GetButton("Jump");
-        stepInput = Input.GetButtonDown("Fire3");
+        stepInput = Input.GetButton("Fire3");
         if(!jumpHeld && jumpHeld != previousJumpHeld)
         {
             owner.CharacterMovement.JumpReleased = true;

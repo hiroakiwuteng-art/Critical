@@ -547,8 +547,11 @@ MonoBehaviour:
   speed: 5
   jumpPower: 10
   conservedVerticalMomentum: 0.3
-  stepDistance: 5
-  stepSpeed: 30
+  stepDistance: 2.5
+  stepSpeed: 80
+  canStepInAir: 1
+  stepCooldown: 0.5
+  canStep: 1
   rb: {fileID: 1236918213}
   grounded: 0
   groundedCheckDistance: 0.1
