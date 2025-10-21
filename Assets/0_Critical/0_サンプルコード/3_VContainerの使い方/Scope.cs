@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class Scope : LifetimeScope
 {
     [SerializeField]
-    private Button button;
+    private Hogera button;
 
     protected override void Configure(IContainerBuilder builder)
     {
@@ -14,7 +14,6 @@ public class Scope : LifetimeScope
         builder.Register<Hoge>(Lifetime.Singleton);
 
         builder.RegisterEntryPoint<Piyo>();
-        builder.RegisterEntryPoint<Hogera>();
 
         builder.RegisterComponent(button);
     }
