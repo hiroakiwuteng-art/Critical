@@ -8,7 +8,7 @@ public class Movement : MonoBehaviour
     private bool jumpInput; //ジャンプ入力
     private bool jumpHeld; //ジャンプボタン長押ししてるか
     private bool jumpReleased; //ジャンプ入力が消えたらこれが一瞬だけTrueになる。長押しの高いジャンプのメソッドに使う
-    private bool stepInput; //ステップ入力
+    private bool stepInput;
 
     [SerializeField] private Character owner;//どのキャラに繋がってる
 
@@ -17,14 +17,10 @@ public class Movement : MonoBehaviour
     [SerializeField] private float conservedVerticalMomentum; /* ０から１までにしてください
                                                                * ０なら、上向速度はどんなに高くても、ジャンプしたら普通のジャンプ速度になる。
                                                                * １だったら、新しい上向速度はジャンプ＋前の速度になる*/
-    [SerializeField] private float stepDistance;　// ステップ距離
-    [SerializeField] private float stepSpeed; //ステップ速度
-    [SerializeField] private bool canStepInAir; //キャラは空中でステップできるか
-    [SerializeField] private float stepCooldown; //ステップ後あと何秒にまたステップできるか
-    [SerializeField] private bool canStep; //今ステップできるか
-    private float stepInitialPosition; //ステップし始めた時にどこにいる
-    private bool stepping; //今ステップ中か
-    private int stepDirection; //ー１：左、１：右
+    [SerializeField] private float stepDistance;
+    [SerializeField] private float stepSpeed;
+    private float stepInitialPosition;
+    private bool stepping;
 
     [SerializeField] private Rigidbody rb;
 
@@ -41,28 +37,31 @@ public class Movement : MonoBehaviour
     [SerializeField] private float terminalVelocity; //落ちる速度の限界
 
     [SerializeField] private float jumpReleaseModifier; //ジャンプ入力長押しやめたらこの変数で乗じる
-
+    
     public void Move()
     {
         /*
          * 動く
          */
+        Debug.Log("Step input: " + stepInput + "\nStepping: " + stepping);
+        Debug.Log("Lateral Velocity: " + rb.linearVelocity.x);
         if (owner.Alive)
         {
-            if (!stepping)
-            {
-                rb.linearVelocity = new Vector3(lateralMovement * speed, rb.linearVelocity.y, 0f);
-            }
-            if (jumpInput)
+            rb.linearVelocity = new Vector3(lateralMovement * speed, rb.linearVelocity.y, 0f);
+            if(jumpInput)
             {
                 Jump();
             }
             ReduceJumpSpeedOnRelease();
-            if (canStep && stepInput && !stepping && (canStepInAir || Grounded()))
+            if(stepInput && !stepping)
             {
                 Step();
             }
-            ManageStep();
+            if(stepping)
+            {
+                ManageStep();
+            }
+            ManageJumps();
         }
         FallFast();
     }
@@ -134,51 +133,33 @@ public class Movement : MonoBehaviour
          */
         if (rb.linearVelocity.y < 0f)
         {
-            rb.linearVelocity = rb.linearVelocity + Vector3.down * Mathf.Pow(fallSpeedModifier, 2) * Time.deltaTime;
+            rb.linearVelocity = rb.linearVelocity + Vector3.down * fallSpeedModifier * fallSpeedModifier * Time.deltaTime;
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, Mathf.Clamp(rb.linearVelocity.y, -terminalVelocity, 0f), 0f);
         }
     }
     private void Step()
     {
-        Debug.Log("Stepping");
-        stepInitialPosition = transform.position.x;
         if(lateralMovement > 0f)
         {
-            stepDirection = 1;
+            rb.linearVelocity += Vector3.right * stepSpeed;
         }
-        if(lateralMovement < 0f)
+        if(lateralMovement <0f)
         {
-            stepDirection = -1;
+            rb.linearVelocity += Vector3.left * stepSpeed;
         }
-        rb.linearVelocity = rb.linearVelocity + Vector3.right * stepDirection * stepSpeed * 1.1f;
-        canStep = false;
         stepping = true;
     }
     private void ManageStep()
     {
-        //ステップの速度を付ける。そしていつステップを止めるか
-        if(stepping)
+        if(stepping && Mathf.Abs(transform.position.x - stepInitialPosition) >= stepDistance)
         {
-            if (Mathf.Abs(transform.position.x - stepInitialPosition) >= stepDistance || Mathf.Abs(rb.linearVelocity.x) < 0.5f * stepSpeed)
-            {
-                StopStep();
-            }
-            rb.linearVelocity = new Vector3(stepDirection * stepSpeed, rb.linearVelocity.y, 0f);
+            rb.linearVelocity = Vector3.zero;
+            stepping = false;
         }
-    }
-    private void StopStep()
-    {
-        //ステップを止める
-        rb.linearVelocity = Vector3.zero;
-        stepping = false;
-        Invoke("StepCooldown", stepCooldown);
-        stepDirection = 0;
-        Debug.Log("Step Complete");
-    }
-    private void StepCooldown()
-    {
-        Debug.Log("Resetting Step");
-        canStep = true;
+        if(rb.linearVelocity.x == 0f)
+        {
+            stepping = false;
+        }
     }
     public bool StepInput
     {
