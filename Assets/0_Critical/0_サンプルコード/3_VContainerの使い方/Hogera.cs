@@ -3,17 +3,13 @@ using UnityEngine.UI;
 using VContainer;
 using VContainer.Unity;
 
-public class Hogera : IStartable
+public class Hogera : MonoBehaviour
 {
-    private Button button;
-    private Hoge hoge;
-    public Hogera(Button button , Hoge hoge)
-    {
-        this.button = button;
-        this.hoge = hoge;
-    }
+    [SerializeField]private Button button;
+    [Inject]private Hoge hoge;
 
-    public void Start()
+
+    private void Start()
     {
         button.onClick.AddListener(OnClicked);
     }
