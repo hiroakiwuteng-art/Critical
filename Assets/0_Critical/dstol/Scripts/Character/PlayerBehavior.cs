@@ -23,5 +23,6 @@ public class PlayerBehavior : MonoBehaviour
         playerInput.ReadMovementInput();
         playerInput.ApplyInput();
         movement.Move();
+        movement.ManageJumps();
     }
 }
