@@ -4,6 +4,7 @@ public class Character : MonoBehaviour
 {
     [SerializeField] private bool alive;
     [SerializeField] private bool hostile;
+    private Vector3 startPosition;
 
     [SerializeField] private Movement characterMovement;
     [SerializeField] private bool isPlayer;
@@ -17,7 +18,11 @@ public class Character : MonoBehaviour
 
     public void Die()
     {
-        alive = false;
+        if(isPlayer)
+        {
+            transform.position = startPosition;
+        }
+        else { Destroy(this.gameObject); }
     }
     public bool Alive
     {
@@ -33,5 +38,14 @@ public class Character : MonoBehaviour
     public Movement CharacterMovement
     {
         get { return characterMovement; }
+    }
+    public bool IsPlayer
+    {
+        get { return isPlayer; }
+    }
+    public Vector3 StartPosition
+    {
+        get { return startPosition; }
+        set { startPosition = value; }
     }
 }

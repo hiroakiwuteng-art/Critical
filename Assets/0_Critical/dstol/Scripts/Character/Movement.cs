@@ -4,6 +4,8 @@ using UnityEngine;
  */
 public class Movement : MonoBehaviour
 {
+    [SerializeField] private bool canMove; //行動可能
+
     private float lateralMovement; //右左行動入力
     private bool jumpInput; //ジャンプ入力
     private bool jumpHeld; //ジャンプボタン長押ししてるか
@@ -49,7 +51,7 @@ public class Movement : MonoBehaviour
          */
         if (owner.Alive)
         {
-            if (!stepping)
+            if (!stepping && canMove)
             {
                 rb.linearVelocity = new Vector3(lateralMovement * speed, rb.linearVelocity.y, 0f);
             }
@@ -152,6 +154,7 @@ public class Movement : MonoBehaviour
         }
         rb.linearVelocity = rb.linearVelocity + Vector3.right * stepDirection * stepSpeed * 1.1f;
         canStep = false;
+        canMove = false;
         stepping = true;
     }
     private void ManageStep()
@@ -179,6 +182,7 @@ public class Movement : MonoBehaviour
     {
         Debug.Log("Resetting Step");
         canStep = true;
+        canMove = true;
     }
     public bool StepInput
     {

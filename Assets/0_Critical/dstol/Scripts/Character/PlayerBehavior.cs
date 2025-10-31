@@ -14,6 +14,7 @@ public class PlayerBehavior : MonoBehaviour
 
     private void Start()
     {
+        character.StartPosition = transform.position;
         playerInput.previousJumpHeld = false;
         movement.Stepping = false;
     }
