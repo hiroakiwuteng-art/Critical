@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
+    [SerializeField] Animator animator;
+
     [SerializeField] private bool alive;
     [SerializeField] private bool hostile;
     private Vector3 startPosition;
@@ -26,14 +28,8 @@ public class Character : MonoBehaviour
     }
     public bool Alive
     {
-        get
-        {
-            return alive;
-        }
-        set
-        {
-            alive = value;
-        }
+        get { return alive; }
+        set { alive = value; }
     }
     public Movement CharacterMovement
     {
@@ -47,5 +43,9 @@ public class Character : MonoBehaviour
     {
         get { return startPosition; }
         set { startPosition = value; }
+    }
+    public Animator Animator
+    {
+        get { return animator; }
     }
 }
