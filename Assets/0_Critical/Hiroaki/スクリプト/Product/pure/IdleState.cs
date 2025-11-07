@@ -1,15 +1,15 @@
 using core;
 using UnityEngine;
 
-public class SlimeJumpState:IState
+public class IdleState:IState<SlimeStateData>
 {
     public void Enter()
     {
 
     }
-    public void Tick()
+    public TriggerId? Tick(SlimeStateData data)
     {
-
+        return null;
     }
     public void Exit()
     {

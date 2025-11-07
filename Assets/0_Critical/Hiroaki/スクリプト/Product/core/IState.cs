@@ -1,9 +1,10 @@
+
 namespace core
 {
-    public interface IState
+    public interface IState<T> where T : IStateData<T>
     {
         void Enter();
-        void Tick();
+        TriggerId? Tick(T data);
         void Exit();
     }
 }

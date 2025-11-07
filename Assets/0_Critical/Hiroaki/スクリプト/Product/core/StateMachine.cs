@@ -1,39 +1,61 @@
 using System.Collections.Generic;
+
 namespace core
 {
-    public class StateMachine
+    public class StateMachine<T> where T : IStateData<T>
     {
-        public IStateData StateData { get; private set; }
-
-        private readonly Dictionary<StateId, IState> _states = new();
+        private readonly T StateData;
+        private readonly Dictionary<StateId, IState<T>> _states = new();
         private readonly Dictionary<(StateId, TriggerId), StateId> _transitions = new();
         private StateId _currentStateId;
-        private IState _currentState;
-        public StateMachine(IStateData stateData)
+        private IState<T> _currentState;
+        public StateMachine(T stateData)
         {
             StateData = stateData;
             addStates(StateData.GetStates());
             addTransitions(StateData.GetTransitions());
+            SetInitialize(StateData.GetInitStateId());
         }
-
-        public void SetInitialize(StateId id)
+        public void Enter()
         {
-            _currentStateId = id;
-            _currentState = _states[_currentStateId];
             _currentState.Enter();
         }
         public void Tick()
         {
-            _currentState.Tick();
+            TriggerId? trigger = _currentState.Tick(StateData);
+            if (trigger.HasValue)
+            {
+                ChangeState(trigger.Value);
+            }
         }
         public void Exit()
         {
             _currentState.Exit();
         }
-        public void ChangeState(TriggerId id)
+
+        private void addStates(params (StateId id, IState<T> state)[] states)
+        {
+            foreach (var i in states)
+            {
+                _states[i.id] = i.state;
+            }
+        }
+        private void addTransitions(params (StateId from, TriggerId trigger, StateId to)[] transitions)
+        {
+            foreach (var i in transitions)
+            {
+                _transitions[(i.from, i.trigger)] = i.to;
+            }
+        }
+        private void SetInitialize(StateId id)
+        {
+            _currentStateId = id;
+            _currentState = _states[_currentStateId];
+        }
+        private void ChangeState(TriggerId id)
         {
             var key = (_currentStateId, id);
-            if(!_transitions.TryGetValue(key,out var next))
+            if (!_transitions.TryGetValue(key, out var next))
             {
                 return;
             }
@@ -41,21 +63,6 @@ namespace core
             _currentStateId = next;
             _currentState = _states[_currentStateId];
             _currentState.Enter();
-        }
-
-        private void addStates(params (StateId id , IState state)[] states)
-        {
-            foreach (var i in states)
-            {
-                _states[i.id] = i.state;
-            }
-        }
-        private void addTransitions(params(StateId from,TriggerId trigger,StateId to)[] transitions)
-        {
-            foreach(var i in transitions)
-            {
-                _transitions[(i.from, i.trigger)] = i.to;
-            }
         }
     }
 }
