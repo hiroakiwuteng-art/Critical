@@ -6,7 +6,7 @@ public class PlayerBehavior : MonoBehaviour
     [SerializeField] private Character character;
     [SerializeField] private CameraControl cameraControl;
     private PlayerInput playerInput;
-
+    
     private void Awake()
     {
         playerInput = new PlayerInput();

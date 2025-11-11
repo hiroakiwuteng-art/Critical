@@ -15,11 +15,7 @@ public class MusicTrigger : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        bool isPlayer = other.TryGetComponent<Character>(out Character character);
-        if(character.IsPlayer && !alreadyEntered)
-        {
-            bgmManager.PlayTrack(trackNumber);
-            alreadyEntered = true;
-        }
+        bgmManager.PlayTrack(trackNumber);
+        alreadyEntered = true;
     }
 }

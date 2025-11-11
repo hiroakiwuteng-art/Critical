@@ -3,6 +3,7 @@ using UnityEngine;
 public class Character : MonoBehaviour
 {
     [SerializeField] Animator animator;
+    [SerializeField] GameManager gameManager;
 
     [SerializeField] private bool alive;
     [SerializeField] private bool hostile;
@@ -25,6 +26,10 @@ public class Character : MonoBehaviour
             transform.position = startPosition;
         }
         else { Destroy(this.gameObject); }
+    }
+    public GameManager GameManager
+    {
+        get { return gameManager; }
     }
     public bool Alive
     {

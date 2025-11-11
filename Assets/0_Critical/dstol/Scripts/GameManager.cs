@@ -2,15 +2,44 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private UIManager uiManager;
+    [SerializeField] private int pauseUiIndex;
+    [SerializeField] private BGMManager bgmManager;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        bgmManager.LoadAllTracks();
+        UnPause();
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+    public void Pause()
+    {
+        Time.timeScale = 0f;
+        uiManager.UIElements[pauseUiIndex].SetActive(true);
+    }
+    public void UnPause()
+    {
+        Time.timeScale = 1f;
+        uiManager.UIElements[pauseUiIndex].SetActive(false);
+    }
+    public void TogglePause()
+    {
+        if(Time.timeScale == 0f)
+        {
+            UnPause();
+        }
+        else
+        {
+            Pause();
+        }
     }
 }

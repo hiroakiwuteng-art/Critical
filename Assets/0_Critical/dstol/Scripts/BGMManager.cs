@@ -4,7 +4,14 @@ public class BGMManager : MonoBehaviour
 {
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip[] bgms;
-    
+
+    public void LoadAllTracks()
+    {
+        for(int i = 0; i < bgms.Length; i++)
+        {
+            bgms[i].LoadAudioData();
+        }
+    }
     public void ChangeTrack(int track)
     {
         if (bgms[track] == audioSource.clip)
@@ -25,7 +32,7 @@ public class BGMManager : MonoBehaviour
     {
         Debug.Log("Player Track #" + track);
         ChangeTrack(track);
-        audioSource.Play();
+        audioSource.PlayScheduled(AudioSettings.dspTime + 0.5f);
     }
     public void PlayTrack(AudioClip track)
     {
