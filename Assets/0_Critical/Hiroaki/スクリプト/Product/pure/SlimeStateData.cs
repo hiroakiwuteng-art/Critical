@@ -16,7 +16,7 @@ public class SlimeStateData:IStateData<SlimeStateData>
 
     private readonly ReturnState returnState;
     private readonly StateId returnId = new StateId("return");
-    public readonly TriggerId returnTrigger = new TriggerId("ReturnTrigger");
+    public readonly TriggerId ReturnTrigger = new TriggerId("ReturnTrigger");
     
     public SlimeStateData(IdleState idleState,RushState rushState,JumpState jumpState,ReturnState returnState)
     {
@@ -42,8 +42,8 @@ public class SlimeStateData:IStateData<SlimeStateData>
         {
             (idleId,RushTrigger,rushId),
             (rushId,JumpTrigger,jumpId),
-            (jumpId,returnTrigger,returnId),
-            (returnId,returnTrigger,idleId)
+            (jumpId,ReturnTrigger,returnId),
+            (returnId,ReturnTrigger,idleId)
         };
     }
     public StateId GetInitStateId()

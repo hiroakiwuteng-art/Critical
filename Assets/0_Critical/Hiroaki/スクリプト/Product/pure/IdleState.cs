@@ -5,11 +5,11 @@ public class IdleState:IState<SlimeStateData>
 {
     public void Enter()
     {
-
+        
     }
     public TriggerId? Tick(SlimeStateData data)
     {
-        return null;
+        return data.RushTrigger;
     }
     public void Exit()
     {
