@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     {
         bgmManager.LoadAllTracks();
         UnPause();
+        uiManager.ToggleUIElement(1);
     }
 
     // Update is called once per frame
@@ -25,6 +26,13 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 0f;
         uiManager.UIElements[pauseUiIndex].SetActive(true);
+        for(int i = 0; i < uiManager.UIElements.Length; i++)
+        {
+            if(i != pauseUiIndex)
+            {
+                uiManager.UIElements[i].SetActive(false);
+            }
+        }
     }
     public void UnPause()
     {
@@ -35,7 +43,11 @@ public class GameManager : MonoBehaviour
     {
         if(Time.timeScale == 0f)
         {
-            UnPause();
+            if (!uiManager.UIElements[pauseUiIndex].activeInHierarchy)
+            {
+                Pause();
+            }
+            else { UnPause(); }
         }
         else
         {

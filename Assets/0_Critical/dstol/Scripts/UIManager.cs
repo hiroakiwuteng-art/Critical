@@ -24,6 +24,13 @@ public class UIManager : MonoBehaviour
         {
             uiElements[index].SetActive(true);
         }
+        for(int i = 0; i < uiElements.Length; i++)
+        {
+            if(i != index && uiElements[i].activeInHierarchy)
+            {
+                uiElements[i].SetActive(false);
+            }
+        }
     }
     public GameObject[] UIElements
     {

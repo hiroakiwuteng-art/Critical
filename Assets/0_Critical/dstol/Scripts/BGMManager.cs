@@ -39,4 +39,8 @@ public class BGMManager : MonoBehaviour
         ChangeTrack(track);
         audioSource.Play();
     }
+    public void SetBGMVolume(float value)
+    {
+        audioSource.volume = value;
+    }
 }
