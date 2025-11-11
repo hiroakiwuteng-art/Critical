@@ -5,6 +5,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private UIManager uiManager;
     [SerializeField] private int pauseUiIndex;
     [SerializeField] private BGMManager bgmManager;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {

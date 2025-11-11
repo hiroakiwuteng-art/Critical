@@ -1,9 +1,11 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class BGMManager : MonoBehaviour
 {
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip[] bgms;
+    private float seVolume;
 
     public void LoadAllTracks()
     {
@@ -42,5 +44,13 @@ public class BGMManager : MonoBehaviour
     public void SetBGMVolume(float value)
     {
         audioSource.volume = value;
+    }
+    public void SetSEVolume(float value)
+    {
+        seVolume = value;
+    }
+    public float SEVolume
+    {
+        get { return seVolume; }
     }
 }
