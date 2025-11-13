@@ -6,6 +6,7 @@ public class EnemyManager:MonoBehaviour
     private StateMachine<SlimeStateData> slimeSM;
     [SerializeField]private Animator SlimeAnimator;
     [SerializeField] private Transform SlimeTf;
+    [SerializeField] private Transform PlayerTf;
 
     public void Start()
     {
@@ -23,10 +24,10 @@ public class EnemyManager:MonoBehaviour
     private StateMachine<SlimeStateData> createSlimeSM()
     {
         SlimeStateData data = new SlimeStateData(
-            new IdleState(),
-            new RushState(SlimeAnimator,SlimeTf),
-            new JumpState(SlimeAnimator),
-            new ReturnState());
+            new IdleState(SlimeAnimator),
+            new RushState(SlimeAnimator,SlimeTf,PlayerTf),
+            new JumpState(SlimeAnimator,SlimeTf,PlayerTf),
+            new ReturnState(SlimeAnimator,SlimeTf));
         return new StateMachine<SlimeStateData>(data);
     }
 }

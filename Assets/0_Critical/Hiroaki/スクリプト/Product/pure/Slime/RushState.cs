@@ -5,20 +5,32 @@ public class RushState:IState<SlimeStateData>
 {
     private Animator _animator;
     private Transform _slimeTf;
+    private Transform _playerTf;
 
     private float PreStopCount;
     private float ReturnStopCount;
 
-    private int speed=30;
-    public RushState(Animator animator, Transform transform)
+    private int speed=40;
+    public RushState(Animator animator, Transform transform, Transform playerTf)
     {
         _animator = animator;
         _slimeTf = transform;
+        _playerTf = playerTf;
     }
 
     public void Enter()
     {
-        _animator.Play("PreRush");
+        if(_slimeTf.localPosition.z>_playerTf.localPosition.z)
+        {
+            _slimeTf.localRotation = Quaternion.Euler(0, 180, 0);
+            speed = -40;
+        }
+        else
+        {
+            _slimeTf.localRotation = Quaternion.Euler(0, 0, 0);
+            speed = 40;
+        }
+            _animator.Play("PreRush");
     }
     public TriggerId? Tick(SlimeStateData data)
     {
@@ -36,9 +48,9 @@ public class RushState:IState<SlimeStateData>
         }
         if (_stateInfo.IsName("AttackRush"))
         {
-            Vector3 a = _slimeTf.position;
+            Vector3 a = _slimeTf.localPosition;
             a.z+=speed*Time.deltaTime;
-            _slimeTf.position = a;
+            _slimeTf.localPosition = a;
 
             if (_stateInfo.normalizedTime >= 1)
             {

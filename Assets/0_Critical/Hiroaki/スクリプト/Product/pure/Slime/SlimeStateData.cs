@@ -43,7 +43,7 @@ public class SlimeStateData:IStateData<SlimeStateData>
             (idleId,RushTrigger,rushId),
             (rushId,JumpTrigger,jumpId),
             (jumpId,ReturnTrigger,returnId),
-            (returnId,ReturnTrigger,idleId)
+            (returnId,IdleTrigger,idleId)
         };
     }
     public StateId GetInitStateId()
