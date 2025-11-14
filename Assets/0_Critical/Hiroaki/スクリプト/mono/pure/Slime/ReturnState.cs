@@ -4,8 +4,8 @@ public class ReturnState:IState<SlimeStateData>
 {
     private SlimeRefs _refs;
 
-    private Vector3 fixedPosition_1 = new (0,-7,-10);
-    private Vector3 fixedPosition2 = new(0,-7,10);
+    private Vector3 fixedPosition_1 = new (-10,-7,0);
+    private Vector3 fixedPosition2 = new(10,-7,0);
     private Vector3 targetPosition;
     private float distance;
 
@@ -18,7 +18,7 @@ public class ReturnState:IState<SlimeStateData>
 
     public void Enter()
     {
-        if (_refs.target.localPosition.z < 0)
+        if (_refs.target.localPosition.x < 0)
         {
             targetPosition = fixedPosition_1;
         }
@@ -26,7 +26,7 @@ public class ReturnState:IState<SlimeStateData>
         {
             targetPosition = fixedPosition2;
         }
-        distance=targetPosition.z-_refs.target.localPosition.z;
+        distance=targetPosition.x -_refs.target.localPosition.x;
         firstY = _refs.target.localPosition.y;
         _refs.animator.Play("ReturnJump");
     }
@@ -34,7 +34,7 @@ public class ReturnState:IState<SlimeStateData>
     {
         var stateInfo = _refs.animator.GetCurrentAnimatorStateInfo(0);
         Vector3 a = _refs.target.localPosition;
-        a.z += distance*8/10 * Time.deltaTime;
+        a.x += distance*8/10 * Time.deltaTime;
         //if (stateInfo.normalizedTime < 0.1)
         //{
         //    Vector3 b = _refs.core.localPosition;

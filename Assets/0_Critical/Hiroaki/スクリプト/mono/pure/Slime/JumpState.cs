@@ -19,15 +19,15 @@ public class JumpState:IState<SlimeStateData>
 
     public void Enter()
     {
-        if (_refs.target.localPosition.z > _playerTf.localPosition.z)
+        if (_refs.target.localPosition.x > _playerTf.localPosition.x)
         {
-            _refs.target.localRotation = Quaternion.Euler(0, 180, 0);
+            _refs.target.localRotation = Quaternion.Euler(0, -90, 0);
         }
         else
         {
-            _refs.target.localRotation = Quaternion.Euler(0, 0, 0);
+            _refs.target.localRotation = Quaternion.Euler(0, 90, 0);
         }
-        distance = _playerTf.localPosition.z - _refs.target.localPosition.z;
+        distance = _playerTf.localPosition.x - _refs.target.localPosition.x;
         firstY =_refs.target.localPosition.y;
         _refs.animator.Play("Jump");
     }
@@ -38,7 +38,7 @@ public class JumpState:IState<SlimeStateData>
         {
             Vector3 a = _refs.target.localPosition;
             a.y += 20 * Time.deltaTime;
-            a.z += distance * Time.deltaTime;
+            a.x += distance * Time.deltaTime;
             _refs.target.localPosition = a;
         }
         //if(stateInfo.normalizedTime>0.6 && stateInfo.normalizedTime<0.7)
@@ -62,16 +62,16 @@ public class JumpState:IState<SlimeStateData>
                 return data.ReturnTrigger;
             }
         }
-        if (_refs.target.localPosition.z > 14)
+        if (_refs.target.localPosition.x > 14)
         {
             Vector3 a=_refs.target.localPosition;
-            a.z = 14;
+            a.x = 14;
             _refs.target.localPosition = a;
         }
-        if (_refs.target.localPosition.z <-14)
+        if (_refs.target.localPosition.x <-14)
         {
             Vector3 a = _refs.target.localPosition;
-            a.z = -14;
+            a.x = -14;
             _refs.target.localPosition = a;
         }
 

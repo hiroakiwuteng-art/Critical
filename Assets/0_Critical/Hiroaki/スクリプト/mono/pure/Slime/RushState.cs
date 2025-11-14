@@ -19,14 +19,14 @@ public class RushState:IState<SlimeStateData>
 
     public void Enter()
     {
-        if(_refs.target.localPosition.z>_playerTf.localPosition.z)
+        if(_refs.target.localPosition.x>_playerTf.localPosition.x)
         {
-            _refs.target.localRotation = Quaternion.Euler(0, 180, 0);
+            _refs.target.localRotation = Quaternion.Euler(0, -90, 0);
             speed = -40;
         }
         else
         {
-            _refs.target.localRotation = Quaternion.Euler(0, 0, 0);
+            _refs.target.localRotation = Quaternion.Euler(0, 90, 0);
             speed = 40;
         }
             _refs.animator.Play("PreRush");
@@ -48,7 +48,7 @@ public class RushState:IState<SlimeStateData>
         if (_stateInfo.IsName("AttackRush"))
         {
             Vector3 a = _refs.target.localPosition;
-            a.z+=speed*Time.deltaTime;
+            a.x+=speed*Time.deltaTime;
             _refs.target.localPosition = a;
 
             if (_stateInfo.normalizedTime >= 1)
@@ -67,7 +67,7 @@ public class RushState:IState<SlimeStateData>
                 }
             }
         }
-        if (_refs.target.localPosition.z > 14 || _refs.target.localPosition.z < -14)
+        if (_refs.target.localPosition.x > 14 || _refs.target.localPosition.x < -14)
         {
             return data.JumpTrigger;
         }

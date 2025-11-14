@@ -30,6 +30,7 @@ public class SlimeState : IState<BossStateData>
     }
     public void Exit()
     {
+        Object.Destroy(obj);
         _slimeSM.Exit();
     }
 }
