@@ -3,38 +3,37 @@ using UnityEngine;
 
 public class RushState:IState<SlimeStateData>
 {
-    private Animator _animator;
-    private Transform _slimeTf;
-    private Transform _playerTf;
+    private SlimeRefs _refs;
+
+    private readonly Transform _playerTf;
 
     private float PreStopCount;
     private float ReturnStopCount;
 
     private int speed=40;
-    public RushState(Animator animator, Transform transform, Transform playerTf)
+    public RushState(SlimeRefs refs, Transform playerTf)
     {
-        _animator = animator;
-        _slimeTf = transform;
+        _refs = refs;
         _playerTf = playerTf;
     }
 
     public void Enter()
     {
-        if(_slimeTf.localPosition.z>_playerTf.localPosition.z)
+        if(_refs.target.localPosition.z>_playerTf.localPosition.z)
         {
-            _slimeTf.localRotation = Quaternion.Euler(0, 180, 0);
+            _refs.target.localRotation = Quaternion.Euler(0, 180, 0);
             speed = -40;
         }
         else
         {
-            _slimeTf.localRotation = Quaternion.Euler(0, 0, 0);
+            _refs.target.localRotation = Quaternion.Euler(0, 0, 0);
             speed = 40;
         }
-            _animator.Play("PreRush");
+            _refs.animator.Play("PreRush");
     }
     public TriggerId? Tick(SlimeStateData data)
     {
-        var _stateInfo = _animator.GetCurrentAnimatorStateInfo(0);
+        var _stateInfo = _refs.animator.GetCurrentAnimatorStateInfo(0);
         if (_stateInfo.IsName("PreRush"))
         {
             if (_stateInfo.normalizedTime >= 1)
@@ -42,19 +41,19 @@ public class RushState:IState<SlimeStateData>
                 PreStopCount+=Time.deltaTime;
                 if (PreStopCount > 1)
                 {
-                    _animator.Play("AttackRush");
+                    _refs.animator.Play("AttackRush");
                 }
             }
         }
         if (_stateInfo.IsName("AttackRush"))
         {
-            Vector3 a = _slimeTf.localPosition;
+            Vector3 a = _refs.target.localPosition;
             a.z+=speed*Time.deltaTime;
-            _slimeTf.localPosition = a;
+            _refs.target.localPosition = a;
 
             if (_stateInfo.normalizedTime >= 1)
             {
-                _animator.Play("ReturnRush");
+                _refs.animator.Play("ReturnRush");
             }
         }
         if (_stateInfo.IsName("ReturnRush"))
@@ -67,6 +66,10 @@ public class RushState:IState<SlimeStateData>
                     return data.JumpTrigger;
                 }
             }
+        }
+        if (_refs.target.localPosition.z > 14 || _refs.target.localPosition.z < -14)
+        {
+            return data.JumpTrigger;
         }
 
         return null;

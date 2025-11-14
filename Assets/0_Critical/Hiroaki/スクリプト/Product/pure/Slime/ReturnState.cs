@@ -2,7 +2,7 @@ using UnityEngine;
 using core;
 public class ReturnState:IState<SlimeStateData>
 {
-    private Animator _animator;
+    private SlimeRefs _refs;
 
     private Vector3 fixedPosition_1 = new (0,-7,-10);
     private Vector3 fixedPosition2 = new(0,-7,10);
@@ -11,17 +11,14 @@ public class ReturnState:IState<SlimeStateData>
 
     private float firstY;
 
-    private Transform _slimeTf;
-
-    public ReturnState(Animator animator,Transform slimeTf)
+    public ReturnState(SlimeRefs refs)
     {
-        _animator = animator;
-        _slimeTf = slimeTf;
+        _refs = refs;
     }
 
     public void Enter()
     {
-        if (_slimeTf.localPosition.z < 0)
+        if (_refs.target.localPosition.z < 0)
         {
             targetPosition = fixedPosition_1;
         }
@@ -29,24 +26,31 @@ public class ReturnState:IState<SlimeStateData>
         {
             targetPosition = fixedPosition2;
         }
-        distance=targetPosition.z-_slimeTf.localPosition.z;
-        firstY = _slimeTf.localPosition.y;
-        _animator.Play("ReturnJump");
+        distance=targetPosition.z-_refs.target.localPosition.z;
+        firstY = _refs.target.localPosition.y;
+        _refs.animator.Play("ReturnJump");
     }
     public TriggerId? Tick(SlimeStateData data)
     {
-        var stateInfo = _animator.GetCurrentAnimatorStateInfo(0);
-        Vector3 a = _slimeTf.localPosition;
+        var stateInfo = _refs.animator.GetCurrentAnimatorStateInfo(0);
+        Vector3 a = _refs.target.localPosition;
         a.z += distance*8/10 * Time.deltaTime;
+        //if (stateInfo.normalizedTime < 0.1)
+        //{
+        //    Vector3 b = _refs.core.localPosition;
+        //    b.z -= 0.07f;
+        //    _refs.core.localPosition = b;
+        //}
+
         if (stateInfo.normalizedTime <0.45)
         {
             a.y += 3 * Time.deltaTime;
-            _slimeTf.localPosition = a;
+            _refs.target.localPosition = a;
         }
         else
         {
             a.y -= 3 * Time.deltaTime;
-            _slimeTf.localPosition = a;
+            _refs.target.localPosition = a;
         }
 
 
@@ -58,8 +62,8 @@ public class ReturnState:IState<SlimeStateData>
     }
     public void Exit()
     {
-        Vector3 a = _slimeTf.localPosition;
+        Vector3 a = _refs.target.localPosition;
         a.y = firstY;
-        _slimeTf.localPosition = a;
+        _refs.target.localPosition = a;
     }
 }

@@ -3,31 +3,41 @@ using UnityEngine;
 
 public class EnemyManager:MonoBehaviour
 {
-    private StateMachine<SlimeStateData> slimeSM;
-    [SerializeField]private Animator SlimeAnimator;
-    [SerializeField] private Transform SlimeTf;
+    private StateMachine<BossStateData> bossSM;
+    private SlimeRefs slimeRefs;
     [SerializeField] private Transform PlayerTf;
+    [SerializeField] private GameObject SlimePrefab;
+    [SerializeField] private OnRoom onRoom;
 
     public void Start()
     {
-        slimeSM = createSlimeSM();
-        slimeSM.Enter();
+        slimeRefs = new();
+        bossSM = CreateBossSM();
+       bossSM.Enter();
     }
     public void Update()
     {
-        slimeSM.Tick();
+        bossSM.Tick();
     }
     public void OnDisable()
     {
-        slimeSM.Exit();
+        bossSM.Exit();
     }
-    private StateMachine<SlimeStateData> createSlimeSM()
+
+    private StateMachine<BossStateData> CreateBossSM()
     {
-        SlimeStateData data = new SlimeStateData(
-            new IdleState(SlimeAnimator),
-            new RushState(SlimeAnimator,SlimeTf,PlayerTf),
-            new JumpState(SlimeAnimator,SlimeTf,PlayerTf),
-            new ReturnState(SlimeAnimator,SlimeTf));
+        SlimeState slime = new(CreateSlimeSM(),SlimePrefab,slimeRefs);
+        BossStateData data = new(slime);
+        return new StateMachine<BossStateData>(data);
+    }
+
+    private StateMachine<SlimeStateData>CreateSlimeSM()
+    {
+        SlimeStateData data = new(
+            new IdleState(slimeRefs,onRoom),
+            new RushState(slimeRefs,PlayerTf),
+            new JumpState(slimeRefs,PlayerTf),
+            new ReturnState(slimeRefs));
         return new StateMachine<SlimeStateData>(data);
     }
 }

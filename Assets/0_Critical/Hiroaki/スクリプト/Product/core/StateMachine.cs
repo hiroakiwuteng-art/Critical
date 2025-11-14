@@ -9,6 +9,8 @@ namespace core
         private readonly Dictionary<(StateId, TriggerId), StateId> _transitions = new();
         private StateId _currentStateId;
         private IState<T> _currentState;
+
+        private bool _entered = false;
         public StateMachine(T stateData)
         {
             StateData = stateData;
@@ -18,10 +20,12 @@ namespace core
         }
         public void Enter()
         {
+            _entered = true;
             _currentState.Enter();
         }
         public void Tick()
         {
+            if (!_entered) return;
             TriggerId? trigger = _currentState.Tick(StateData);
             if (trigger.HasValue)
             {
@@ -30,6 +34,7 @@ namespace core
         }
         public void Exit()
         {
+            _entered = false;
             _currentState.Exit();
         }
 

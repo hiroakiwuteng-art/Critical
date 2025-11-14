@@ -3,20 +3,20 @@ using core;
 public class SlimeStateData:IStateData<SlimeStateData>
 {
     private readonly IdleState idleState;
-    private readonly StateId idleId = new StateId("idle");
-    public readonly TriggerId IdleTrigger = new TriggerId("idleTrigger");
+    private readonly StateId idleId = new("idle");
+    public readonly TriggerId IdleTrigger = new("idleTrigger");
 
     private readonly RushState rushState;
-    private readonly StateId rushId = new StateId("rush");
-    public readonly TriggerId RushTrigger = new TriggerId("rushTrigger");
+    private readonly StateId rushId = new("rush");
+    public readonly TriggerId RushTrigger = new("rushTrigger");
 
     private readonly JumpState jumpState;
-    private readonly StateId jumpId = new StateId("jump");
-    public readonly TriggerId JumpTrigger = new TriggerId("JumpTrigger");
+    private readonly StateId jumpId = new("jump");
+    public readonly TriggerId JumpTrigger = new("JumpTrigger");
 
     private readonly ReturnState returnState;
-    private readonly StateId returnId = new StateId("return");
-    public readonly TriggerId ReturnTrigger = new TriggerId("ReturnTrigger");
+    private readonly StateId returnId = new("return");
+    public readonly TriggerId ReturnTrigger = new("ReturnTrigger");
     
     public SlimeStateData(IdleState idleState,RushState rushState,JumpState jumpState,ReturnState returnState)
     {

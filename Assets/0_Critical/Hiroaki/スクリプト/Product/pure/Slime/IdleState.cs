@@ -3,23 +3,27 @@ using UnityEngine;
 
 public class IdleState:IState<SlimeStateData>
 {
-    private Animator _animator;
+    private SlimeRefs _refs;
     private float stopTime;
-
-    public IdleState(Animator animator)
+    private OnRoom _onRoom;
+    public IdleState(SlimeRefs refs,OnRoom onRoom)
     {
-        _animator = animator;
+        _refs = refs;
+        _onRoom = onRoom;
     }
     public void Enter()
     {
-        _animator.Play("Idle");
+        _refs.animator.Play("Idle");
     }
     public TriggerId? Tick(SlimeStateData data)
     {
-        stopTime += Time.deltaTime;
-        if (stopTime > 1)
+        if (_onRoom.OnBossRoom)
         {
-            return data.RushTrigger;
+            stopTime += Time.deltaTime;
+            if (stopTime > 1)
+            {
+                return data.RushTrigger;
+            }
         }
         return null;
     }
