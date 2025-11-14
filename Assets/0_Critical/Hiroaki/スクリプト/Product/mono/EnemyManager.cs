@@ -3,13 +3,41 @@ using UnityEngine;
 
 public class EnemyManager:MonoBehaviour
 {
-    private StateMachine<SlimeStateData> createSlimeSM()
+    private StateMachine<BossStateData> bossSM;
+    private SlimeRefs slimeRefs;
+    [SerializeField] private Transform PlayerTf;
+    [SerializeField] private GameObject SlimePrefab;
+    [SerializeField] private OnRoom onRoom;
+
+    public void Start()
     {
-        SlimeStateData data = new SlimeStateData(
-            new IdleState(),
-            new RushState(),
-            new JumpState(),
-            new ReturnState());
+        slimeRefs = new();
+        bossSM = CreateBossSM();
+       bossSM.Enter();
+    }
+    public void Update()
+    {
+        bossSM.Tick();
+    }
+    public void OnDisable()
+    {
+        bossSM.Exit();
+    }
+
+    private StateMachine<BossStateData> CreateBossSM()
+    {
+        SlimeState slime = new(CreateSlimeSM(),SlimePrefab,slimeRefs);
+        BossStateData data = new(slime);
+        return new StateMachine<BossStateData>(data);
+    }
+
+    private StateMachine<SlimeStateData>CreateSlimeSM()
+    {
+        SlimeStateData data = new(
+            new IdleState(slimeRefs,onRoom),
+            new RushState(slimeRefs,PlayerTf),
+            new JumpState(slimeRefs,PlayerTf),
+            new ReturnState(slimeRefs));
         return new StateMachine<SlimeStateData>(data);
     }
 }
